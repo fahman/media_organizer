@@ -8,12 +8,12 @@ pub fn file_created(path_str: &str) -> Result<String, String> {
                 let datetime: DateTime<Local> = created.into();
                 let formatted_date = datetime.format("%Y-%m-%d").to_string();
 
-                return Ok(formatted_date);
+                Ok(formatted_date)
             } else {
-                return Err("Failed to read file creation date".to_string());
+                Err("Failed to read file creation date".to_string())
             }
         }
-        Err(err) => return Err(err.to_string()),
+        Err(err) => Err(err.to_string()),
     }
 }
 
@@ -24,12 +24,12 @@ pub fn file_modified(path_str: &str) -> Result<String, String> {
                 let datetime: DateTime<Local> = modified.into();
                 let formatted_date = datetime.format("%Y-%m-%d").to_string();
 
-                return Ok(formatted_date);
+                Ok(formatted_date)
             } else {
-                return Err("Failed to read file modified date".to_string());
+                Err("Failed to read file modified date".to_string())
             }
         }
-        Err(err) => return Err(err.to_string()),
+        Err(err) => Err(err.to_string()),
     }
 }
 
@@ -40,12 +40,12 @@ pub fn last_accessed(path_str: &str) -> Result<String, String> {
                 let datetime: DateTime<Local> = accessed.into();
                 let formatted_date = datetime.format("%Y-%m-%d").to_string();
 
-                return Ok(formatted_date);
+                Ok(formatted_date)
             } else {
-                return Err("Failed to read file last accessed date".to_string());
+                Err("Failed to read file last accessed date".to_string())
             }
         }
-        Err(err) => return Err(err.to_string()),
+        Err(err) => Err(err.to_string()),
     }
 }
 
@@ -55,19 +55,19 @@ mod tests {
 
     #[test]
     fn can_read_creation_string() {
-        let result = file_created("./tests/data/test_photo.JPG").unwrap();
-        assert_eq!(result, "2023-10-30");
+        let result = file_created(&format!(".{}tests{0}data{0}test_photo.JPG", std::path::MAIN_SEPARATOR)).unwrap();
+        assert_eq!(result, "2025-01-02");
     }
 
     #[test]
     fn can_read_modified_string() {
-        let result = file_modified("./tests/data/test_photo.JPG").unwrap();
-        assert_eq!(result, "2023-10-30");
+        let result = file_modified(&format!(".{}tests{0}data{0}test_photo.JPG", std::path::MAIN_SEPARATOR)).unwrap();
+        assert_eq!(result, "2025-01-02");
     }
 
     #[test]
     fn can_read_accessed_string() {
-        let result = last_accessed("./tests/data/test_photo.JPG").unwrap();
-        assert_eq!(result, "2023-10-31");
+        let result = last_accessed(&format!(".{}tests{0}data{0}test_photo.JPG", std::path::MAIN_SEPARATOR)).unwrap();
+        assert_eq!(result, "2025-01-02");
     }
 }

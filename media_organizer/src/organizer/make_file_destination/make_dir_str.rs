@@ -61,9 +61,15 @@ pub mod date_read_tests {
 
     #[test]
     fn can_read_photo_creation_date() {
-        env::set_var("DEST_FOLDER", &"tests/test_files");
+        env::set_var(
+            "DEST_FOLDER",
+            &format!("tests{}data", std::path::MAIN_SEPARATOR),
+        );
 
-        let path_str = "tests/test_files/test_photo.JPG";
+        let path_str = &format!(
+            ".{}tests{0}data{0}test_photo.JPG",
+            std::path::MAIN_SEPARATOR
+        );
 
         let date_info = match read_photo_creation_date(path_str) {
             Ok(date_of_photo) => make_dir_string(DirString::DateBreakdown(
@@ -72,14 +78,23 @@ pub mod date_read_tests {
             Err(err) => make_dir_string(DirString::RegularStr(String::from(err))),
         };
 
-        assert_eq!("./tests/test_files/2020/02/01", date_info);
+        assert_eq!(
+            format!("tests{}data{0}2020{0}02{0}01", std::path::MAIN_SEPARATOR),
+            date_info
+        );
     }
 
     #[test]
     fn can_read_video_creation_date() {
-        env::set_var("DEST_FOLDER", &"tests/test_files");
+        env::set_var(
+            "DEST_FOLDER",
+            &format!("tests{}data", std::path::MAIN_SEPARATOR),
+        );
 
-        let path_str = "tests/test_files/test_video.mp4";
+        let path_str = &format!(
+            ".{}tests{0}data{0}test_video.mp4",
+            std::path::MAIN_SEPARATOR
+        );
 
         let date_info = match read_video_creation_date(path_str) {
             Ok(date_of_video) => {
@@ -88,6 +103,9 @@ pub mod date_read_tests {
             Err(err) => make_dir_string(DirString::RegularStr(String::from(err))),
         };
 
-        assert_eq!("./tests/test_files/2021/05/21", date_info);
+        assert_eq!(
+            format!("tests{}data{0}2021{0}05{0}21", std::path::MAIN_SEPARATOR),
+            date_info
+        );
     }
 }

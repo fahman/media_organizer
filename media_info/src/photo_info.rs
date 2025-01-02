@@ -10,9 +10,9 @@ use std::path::Path;
 /// ```
 /// use media_info::read_photo_creation_date;
 ///
-/// let photo_path = "tests/test_data/photo.jpg";
+/// let photo_path = "./tests/data/test_photo.JPG";
 /// let creation_date = read_photo_creation_date(photo_path).unwrap();
-/// assert_eq!(creation_date, "2021-01-01");
+/// assert_eq!(creation_date, "2020-02-01");
 /// ```
 pub fn read_photo_creation_date(path_str: &str) -> Result<String, String> {
     let file = File::open(Path::new(path_str)).expect("could not open photo");

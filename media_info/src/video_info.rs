@@ -9,9 +9,9 @@ use std::path::PathBuf;
 /// ```
 /// use media_info::read_video_creation_date;
 ///
-/// let video_path = "tests/test_data/video.mp4";
+/// let video_path = "tests/data/test_video.mp4";
 /// let creation_date = read_video_creation_date(video_path).unwrap();
-/// assert_eq!(creation_date, "2021-01-01");
+/// assert_eq!(creation_date, "2021-05-21");
 /// ```
 pub fn read_video_creation_date(path_str: &str) -> Result<String, String> {
     ffmpeg::init().expect("could not initialize ffmpeg");

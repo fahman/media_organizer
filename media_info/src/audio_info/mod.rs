@@ -11,9 +11,9 @@ mod audio_util;
 /// ```
 /// use media_info::read_audio_creation_date;
 ///
-/// let audio_path = "tests/test_data/audio.mp3";
+/// let audio_path = "tests/data/test_audio.mp3";
 /// let creation_date = read_audio_creation_date(audio_path).unwrap();
-/// assert_eq!(creation_date, "2021-01-01");
+/// assert_eq!(creation_date, "2024-09-11");
 /// ```
 pub fn read_audio_creation_date(path_str: &str) -> Result<String, String> {
     let date_recorded = match ID3Tag::read_from_path(path_str) {
