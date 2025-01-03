@@ -26,3 +26,4 @@ kamadak-exif = "0.6.1"
 chrono = "0.4.38"
 id3 = "1.14.0"
 fs_metadata = { version = "0.4.0", path = "../fs_metadata" }
+log = "0.4.22"
