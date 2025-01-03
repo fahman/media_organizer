@@ -2,13 +2,13 @@ mod make_dir_str;
 use make_dir_str::{make_audio_dir_str, make_photo_dir_str, make_video_dir_str};
 
 fn get_white_list_video_types<'a>() -> Vec<&'a str> {
-    vec!["mp4", "MP4", "mov", "MOV"]
+    vec!["mp4", "MP4", "mov", "MOV", "avi", "AVI"]
 }
 
 fn get_white_list_photo_types<'a>() -> Vec<&'a str> {
     vec![
         "tiff", "TIFF", "heif", "HEIF", "HEIC", "heic", "AVIF", "avif", "jpeg", "jpg", "JPEG",
-        "JPG", "HEIC", "heic", "PNG", "png", "webp", "WEBP",
+        "JPG", "HEIC", "heic", "PNG", "png", "webp", "WEBP", "dng", "DNG", "gif", "GIF", "raw", "RAW",
     ]
 }
 
