@@ -17,8 +17,13 @@ name = "media_organizer"
 path = "./src/main.rs"
 
 [dependencies]
+chrono = "0.4"
 clap = { version = "4.2.7", features = ["derive"] }
+faccess = "*"
 glob = "0.3.1"
-mkdirp = "1.0.0"
-permissions = "0.4.1"
+lazy_static = "*"
+log = "0.4.22"
+structured-logger = "1.0.3"
 media_info = { version = "0.2.0", path = "../media_info" }
+mkdirp = "1.0.0"
+windows = { version = "0.58", features = ["Win32_Foundation", "Win32_System_Time", "Win32_Storage_FileSystem", "Win32_Security"] }
