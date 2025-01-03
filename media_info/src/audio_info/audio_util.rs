@@ -4,13 +4,6 @@ use std::str::FromStr;
 use fs_metadata::file_created;
 
 /// Writes the creation date of the audio to the metadata.
-///
-/// # Examples
-/// ```
-/// let audio_path = "tests/test_data/audio.mp3";
-/// let creation_date = "2021-01-01";
-/// make_date_recorded_from_audio_file(audio_path, creation_date).unwrap();
-/// ```
 pub fn make_date_recorded_from_audio_file(path_str: &str) -> Option<Timestamp> {
     let formatted_date = file_created(path_str).unwrap();
     let id3_timestamp = Timestamp::from_str(&formatted_date).expect("could not write timestamp");
