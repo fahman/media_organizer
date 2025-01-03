@@ -1,10 +1,14 @@
 use ffmpeg_next as ffmpeg;
-use fs_metadata::file_created;
 use std::path::PathBuf;
+use log::warn;
+use fs_metadata::file_modified;
+use crate::counter::increment_fallback_counter;
 
 /// Reads the creation date of the video from the metadata.
-/// If it can't read the video's creation date, it will fall back to the file's creation date.
 ///
+/// If it can't read the video's creation date, it will fall back to the file's modification date.
+/// Function indicates that fallback took place by adding '.fallback' at the end of the date string
+/// or by returning 'no.date' in case if no date could be determined.
 /// # Examples
 /// ```
 /// use media_info::read_video_creation_date;
@@ -26,15 +30,36 @@ pub fn read_video_creation_date(path_str: &str) -> Result<String, String> {
                 }
             }
 
-            Ok(creation_date)
+            if creation_date.len() == 0 {
+                return fallback_to_file_modified_date(path_str);
+            }
+
+            if creation_date.split('T').count() > 1 {
+                Ok(creation_date.split('T').next().unwrap().to_string())
+            } else {
+                Ok(creation_date.split_whitespace().next().unwrap().to_string())
+            }
         }
         Err(_) => {
-            println!("Error reading video creation date: {:?}", path_str);
-            println!("Falling back to file creation date");
-            // TODO: edit creation date with file creation date?
-
-            let formatted_date = file_created(path_str).unwrap();
-            Ok(formatted_date)
+            fallback_to_file_modified_date(path_str)
         }
     }
+}
+
+fn fallback_to_file_modified_date(path_str: &str) -> Result<String, String> {
+    let file_modified_date_string = file_modified(path_str)?;
+    let final_file_modified_date = if file_modified_date_string.split('T').count() > 1 {
+        match file_modified_date_string.split('T').next() {
+            Some(date) => format!("{date}.fallback"),
+            None => "no.date".to_string(),
+        }
+    } else {
+        match file_modified_date_string.split_whitespace().next() {
+            Some(date) => format!("{date}.fallback"),
+            None => "no.date".to_string(),
+        }
+    };
+    increment_fallback_counter();
+    warn!("Error reading exif: {:?}, falling back to file modification date {:?}", path_str, final_file_modified_date);
+    Ok(final_file_modified_date)
 }
