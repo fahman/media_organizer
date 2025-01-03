@@ -1,57 +1,41 @@
+use crate::organizer::make_file_destination::MakeFileDestinationError;
 use media_info::{read_audio_creation_date, read_photo_creation_date, read_video_creation_date};
 use std::env;
-
-enum DirString<'a> {
-    DateBreakdown(Option<&'a str>),
-    RegularStr(String),
-}
 
 fn finally_make_date_str(appender: String) -> String {
     let dest_folder = env::var("DEST_FOLDER").expect("DEST_FOLDER not set");
     let mut regular_date_folder: String = String::new();
 
-    regular_date_folder.push_str("./");
     regular_date_folder.push_str(&dest_folder);
-    regular_date_folder.push('/');
+    regular_date_folder.push(std::path::MAIN_SEPARATOR);
     regular_date_folder.push_str(&appender);
 
     regular_date_folder
 }
 
-fn make_dir_string(date_time: DirString) -> String {
-    match date_time {
-        DirString::DateBreakdown(breakdown) => {
-            if let Some(breakdown) = breakdown {
-                let replace_date_hyphens = str::replace(breakdown, "-", "/");
-                finally_make_date_str(replace_date_hyphens)
-            } else {
-                finally_make_date_str(String::from("nodatesexist"))
-            }
-        }
-        DirString::RegularStr(reg_string) => finally_make_date_str(reg_string),
+fn make_dir_string(date: &str) -> String {
+    let replace_date_hyphens = str::replace(date, "-", &std::path::MAIN_SEPARATOR.to_string());
+    finally_make_date_str(replace_date_hyphens)
+}
+
+pub(crate) fn make_photo_dir_str(date: &str) -> Result<String, MakeFileDestinationError> {
+    match read_photo_creation_date(date) {
+        Ok(date) => Ok(make_dir_string(date.as_str())),
+        Err(error) => Err(MakeFileDestinationError::Error(error)),
     }
 }
 
-pub fn make_photo_dir_str(dir_str: &str) -> String {
-    match read_photo_creation_date(dir_str) {
-        Ok(date_of_photo) => make_dir_string(DirString::DateBreakdown(
-            date_of_photo.split_whitespace().next(),
-        )),
-        Err(err) => make_dir_string(DirString::RegularStr(err)),
+pub(crate) fn make_video_dir_str(date: &str) -> Result<String, MakeFileDestinationError> {
+    match read_video_creation_date(date) {
+        Ok(date) => Ok(make_dir_string(date.as_str())),
+        Err(error) => Err(MakeFileDestinationError::Error(error)),
     }
 }
 
-pub fn make_video_dir_str(dir_str: &str) -> String {
-    match read_video_creation_date(dir_str) {
-        Ok(date) => make_dir_string(DirString::DateBreakdown(date.split('T').next())),
-        Err(err) => make_dir_string(DirString::RegularStr(err)),
-    }
-}
-
-pub fn make_audio_dir_str(dir_str: &str) -> String {
+pub(crate) fn make_audio_dir_str(dir_str: &str) -> Result<String, MakeFileDestinationError> {
     match read_audio_creation_date(dir_str) {
-        Ok(date) => make_dir_string(DirString::DateBreakdown(Some(&date))),
-        Err(err) => make_dir_string(DirString::RegularStr(err)),
+        Ok(date) => Ok(make_dir_string(date.as_str())),
+        Err(error) => Err(MakeFileDestinationError::Error(error)),
     }
 }
 
@@ -72,10 +56,8 @@ pub mod date_read_tests {
         );
 
         let date_info = match read_photo_creation_date(path_str) {
-            Ok(date_of_photo) => make_dir_string(DirString::DateBreakdown(
-                date_of_photo.split_whitespace().next(),
-            )),
-            Err(err) => make_dir_string(DirString::RegularStr(String::from(err))),
+            Ok(date_of_photo) => make_dir_string(date_of_photo.as_str()),
+            Err(err) => panic!("Test failed because of error: {}", err),
         };
 
         assert_eq!(
@@ -97,10 +79,8 @@ pub mod date_read_tests {
         );
 
         let date_info = match read_video_creation_date(path_str) {
-            Ok(date_of_video) => {
-                make_dir_string(DirString::DateBreakdown(date_of_video.split("T").next()))
-            }
-            Err(err) => make_dir_string(DirString::RegularStr(String::from(err))),
+            Ok(date_of_video) => make_dir_string(date_of_video.as_str()),
+            Err(err) => panic!("Test failed because of error: {}", err),
         };
 
         assert_eq!(
