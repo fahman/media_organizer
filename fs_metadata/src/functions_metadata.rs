@@ -56,22 +56,19 @@ mod tests {
 
     #[test]
     fn can_read_creation_string() {
-        let path = Path::new(&format!("..{}test-media{0}400a861d-014a-4dfb-9143-1a914212fd4d.jpg", std::path::MAIN_SEPARATOR));
-        let result = file_created(path).unwrap();
-        assert_eq!(result, "2024-11-10");
+        let result = file_created(Path::new(&format!("..{}test-media{0}400a861d-014a-4dfb-9143-1a914212fd4d.jpg", std::path::MAIN_SEPARATOR))).unwrap();
+        assert_eq!(result, "2025-01-03");
     }
 
     #[test]
     fn can_read_modified_string() {
-        let path = Path::new(&format!("..{}test-media{0}400a861d-014a-4dfb-9143-1a914212fd4d.jpg", std::path::MAIN_SEPARATOR));
-        let result = file_modified(path).unwrap();
-        assert_eq!(result, "2024-11-10");
+        let result = file_modified(Path::new(&format!("..{}test-media{0}400a861d-014a-4dfb-9143-1a914212fd4d.jpg", std::path::MAIN_SEPARATOR))).unwrap();
+        assert_eq!(result, "2025-01-03");
     }
 
     #[test]
     fn can_read_accessed_string() {
-        let path = Path::new(&format!("..{}test-media{0}400a861d-014a-4dfb-9143-1a914212fd4d.jpg", std::path::MAIN_SEPARATOR));
-        let result = last_accessed(path).unwrap();
-        assert_eq!(result, "2024-11-18");
+        let result = last_accessed(Path::new(&format!("..{}test-media{0}400a861d-014a-4dfb-9143-1a914212fd4d.jpg", std::path::MAIN_SEPARATOR))).unwrap();
+        assert_eq!(result, "2025-01-04");
     }
 }

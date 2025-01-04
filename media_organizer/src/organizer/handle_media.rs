@@ -1,7 +1,6 @@
 use faccess::PathExt;
 use std::env;
 use std::fs::{copy, rename};
-use std::path::Path;
 use std::path::{Path, PathBuf};
 use log::{debug, error, warn};
 use crate::organizer::compare_files::compare_files;

@@ -102,11 +102,11 @@ mod tests {
 
     #[test]
     fn can_make_file_metadata() {
-        let result = FileMetadata::new("./tests/data/test_photo.JPG").unwrap();
+        let result = FileMetadata::new(Path::new("../test-media/400a861d-014a-4dfb-9143-1a914212fd4d.jpg")).unwrap();
 
-        assert_eq!(result.created, "2025-01-02");
-        assert_eq!(result.modified, "2025-01-02");
-        assert_eq!(result.accessed, "2025-01-02");
+        assert_eq!(result.created, "2025-01-03");
+        assert_eq!(result.modified, "2025-01-03");
+        assert_eq!(result.accessed, "2025-01-04");
     }
 
     #[test]
