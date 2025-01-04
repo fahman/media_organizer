@@ -14,4 +14,4 @@ pub use photo_info::*;
 #[cfg(feature = "video")]
 pub use video_info::*;
 
-use counter::get_fallback_counter;
+pub use counter::get_fallback_counter;
